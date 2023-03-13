@@ -12,7 +12,7 @@ export default function Complete(): JSX.Element {
             router.replace('/')
         }
 
-        setTimeout(redirect, 3000)//5秒待ってからリダイレクト
+        setTimeout(redirect, 3000)//3秒待ってからリダイレクト
 
         //タイマー
         const timer = setInterval(() => {
