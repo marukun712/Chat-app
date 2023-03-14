@@ -1,6 +1,6 @@
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
-import { message } from '@types'
+import { message, payload } from '@types'
 import EditModal from '@/components/EditModal';
 import DeleteModal from '@/components/DeleteModal';
 
@@ -23,12 +23,43 @@ export default function Message(): JSX.Element {
             .on(
                 'postgres_changes',
                 {
-                    event: '*',
+                    event: 'INSERT',
                     schema: 'public',
+                    table: "post",
                 },
-                //DBの更新時にPosts配列と新しいメッセージのオブジェクトを連結する
+                //Posts配列と新しいメッセージのオブジェクトを繋げる
                 (payload: any) => setPosts((previous: []) => [].concat(previous, payload.new))
                 //anyに逃げるな
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: "post",
+                },
+                //UPDATEされたメッセージのidとidが一致する要素を更新する
+                (payload: any) => {
+                    setPosts((previous: []) =>
+                        previous.map((obj: any) => (obj.id === payload.old.id ? payload.new : obj))
+                    );
+                }
+                //anyに逃げるな
+
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'DELETE',
+                    schema: 'public',
+                    table: "post",
+                },
+                //DELETEされたメッセージをPosts配列から削除する
+                (payload: any) => {
+                    setPosts((previous: []) => previous.filter((obj: any) => payload.old.id !== obj.id));
+                }
+                //anyに逃げるな
+
             )
             .subscribe()
 

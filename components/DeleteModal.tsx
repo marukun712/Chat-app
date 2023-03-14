@@ -12,8 +12,6 @@ export default function DeleteModal(props: Props): JSX.Element {
             .from('post')
             .delete()
             .eq('id', id)
-
-        await window.location.reload();
     }
 
     return (

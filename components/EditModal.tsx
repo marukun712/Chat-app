@@ -15,8 +15,6 @@ export default function EditModal(props: Props): JSX.Element {
             .eq('id', id)
 
         SetText('')
-
-        await window.location.reload();
     }
 
     return (

@@ -31,3 +31,14 @@ export type Props = {
         id: string
     }
 }
+
+//メッセージの更新時に受け取るpayloadの型
+export type payload = {
+    "schema": string,
+    "table": string,
+    "commit_timestamp": string,
+    "eventType": string,
+    "new": {},
+    "old": {},
+    "errors": null
+}
